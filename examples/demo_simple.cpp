@@ -19,12 +19,14 @@
 
 #include <id3.h>
 #include <stdio.h>
+#include <string.h>
 
 int
 main( int argc, char *argv[] )
 {
   char *filename = NULL;
   ID3Tag *tag;
+  int update = 0;
   
   if (argc != 2)
   {
@@ -46,7 +48,14 @@ main( int argc, char *argv[] )
       {
         char title[1024];
         (void) ID3Field_GetASCII(field, title, 1024);
-        printf("Title: %s\n", title);
+        if ( title[0] == '"' && title[strlen(title)-1] == '"' ) {
+           title[strlen(title)-1] = '\0' ;
+           ID3Field_SetASCII(field, &title[1]) ;
+           printf("Title: %s\n", &title[1]);
+           update = 1 ;
+        } else {
+           printf("Title: %s\n", title);
+        }
       }
       else
       {
@@ -65,7 +74,14 @@ main( int argc, char *argv[] )
       {
         char artist[1024];
         (void) ID3Field_GetASCII(field, artist, 1024);
-        printf("Artist: %s\n", artist);
+        if ( artist[0] == '"' && artist[strlen(artist)-1] == '"' ) {
+           artist[strlen(artist)-1] = '\0' ;
+           ID3Field_SetASCII(field, &artist[1]) ;
+           printf("Artist: %s\n", &artist[1]);
+           update = 1 ;
+        } else {
+           printf("Artist: %s\n", artist);
+        }
       }
       else
       {
@@ -84,7 +100,14 @@ main( int argc, char *argv[] )
       {
         char album[1024];
         (void) ID3Field_GetASCII(field, album, 1024);
-        printf("Album: %s\n", album);
+        if ( album[0] == '"' && album[strlen(album)-1] == '"' ) {
+           album[strlen(album)-1] = '\0' ;
+           ID3Field_SetASCII(field, &album[1]) ;
+           printf("Album: %s\n", &album[1]);
+           update = 1 ;
+        } else {
+           printf("Album: %s\n", album);
+        }
       }
       else
       {
@@ -99,6 +122,10 @@ main( int argc, char *argv[] )
   else
   {
     printf("Didn't get the tag\n");
+  }
+
+  if ( update ) {
+     ID3Tag_Update(tag) ;
   }
   exit (0);
 }
