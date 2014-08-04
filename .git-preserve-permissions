@@ -1,3 +1,5 @@
+0600:::.git-preserve-permissions
+0600:::.git-preserve-times
 0600:::.gitignore
 0600:::AUTHORS
 0600:::COPYING
